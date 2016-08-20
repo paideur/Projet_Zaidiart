@@ -1,0 +1,96 @@
+== CHANGE LOG ==
+= 1.2.2.1 =
+	- Fix - $post global value removed
+	- Fix - Used the_title_attribute('echo=0') instead the_title( '', '', false )
+	- Fix - Using the_post_thumbnail as recommended
+	- Fix - Removed theme support html5 from search form
+	
+= 1.2.2 =
+	- Update - Compatible with WPML
+
+= 1.2.1 =
+	- Tweak - html5 enqueued as twentysixteen
+	- Fix - Unwanted Code removed
+	- Fix - is_product_category undefined issue fixed while using bbpress forum
+	- Update - WooCommerce Account Page css added
+
+= 1.2.0 =
+	- Fix - Deprecated Tag removed
+	- Fix - slider issue fixed
+	- Update - CSS Updated
+
+= 1.1.9 =
+	- New - New logo Options Compatible for Polylang
+	- Fix - WooCommerce Product Category title added
+
+= 1.1.8 =
+	- Fix - Excerpt display issue fixed on Front Page
+	- Fix - entry meta and entry display on Single Page
+	- Fix - portfolio widgets hover issue fixed for user friendly
+
+= 1.1.7 =
+	- Fix - CSS slider class name fixed
+
+= 1.1.6 =
+	- Fix - add_editor_style path issue fixed
+	- Fix - Missing Permalink added to blog widget
+	- Fix - CSS added for slider issues
+	- Tweak - Slider version changed
+	- Update - WooCommerce CSS Updated 
+
+= 1.1.5 =
+	- Fix - Excerpt more function added which was previously removed
+= 1.1.4 =
+	- Tweak - Updated French language on version 1.1.3
+	- Update - Minor description changed
+	- Update - Genericons updated to version 3.4.1
+	
+= 1.1.3 =
+	- Fix - Slider Color issues and Footer menu Fixed
+	- Remove - excerpt_more function unwanted removed
+	- Update - CSS Updated
+
+= 1.1.2 =
+	- Fix - CSS bug fixed
+	-Update - Custom JS updated
+
+= 1.1.1 =
+	- Fix - Conflict with Child theme issue fixed
+
+= 1.1 =
+	- Update - CSS Updated
+
+= 1.0.7 =
+	- Fix - prefixed with theme name for class Customize_Freesia_Empire_upgrade
+	- Fix - Disable Buttom Social Icons issue fixed
+
+= 1.0.6 =
+	- Fix Changelog fixed
+
+= 1.0.5 =
+	- Fix - Minor text fixed
+		  - Template issue fixed
+		  - Undefined Index fixed
+	- Update - pot file updated
+			 - CSS Updated
+			 - JS Updated
+	- New - Blog Title Show Hide Option added
+
+= 1.0.3 =
+	- Fix - Slider Issue fixed
+		  - Blog animation issue fixed
+		  - Blog Title issue fixed
+		  - Sitcky scroll js issue fixed
+		  - Feature Subtitle animation issue fixed
+	- Update - style.css Updated
+			 - responsive.css Updated
+
+= 1.0.2 =
+	- Fix - Animation issue fixed and WOW settings seperated
+
+= 1.0.1 =
+	- Fix - Major fix on all files
+	- Update - Major Update on all files.
+
+= 1.0 =
+	- Initial Release
