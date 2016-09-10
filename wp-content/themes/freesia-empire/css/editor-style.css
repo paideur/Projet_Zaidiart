@@ -475,3 +475,17 @@ body.rtl {
 .rtl table caption {
 	text-align: right;
 }
+
+inscription {
+
+	color: #333;
+	font-family: "Roboto", serif;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 1.6471;
+	margin: 20px 40px;
+	max-width: 260px;
+	vertical-align: baseline;
+}
+
+
