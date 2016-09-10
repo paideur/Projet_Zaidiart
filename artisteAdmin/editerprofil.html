@@ -57,6 +57,86 @@
     <script src="js/respond.min.js"></script>
     <script src="js/lte-ie7.js"></script>
     <![endif]-->
+    <script src="js/jquery.js"></script>
+    <script>
+
+        window.onload = loadArtiste();
+
+        //Fonction pour decomposer la date en Jour/Mois/Année
+        function getDateNumber(date){
+            var dateNumbers = new Array();
+            dateNumbers['day']=date.substring(8, 10);
+            dateNumbers['month']=date.substring(5, 7);
+            dateNumbers['year']=date.substring(0, 4);
+
+            return dateNumbers;
+        }
+        function loadArtiste(){
+            //Recuperer les données en JSON
+            var id='32';
+            $.ajax({
+                type: "POST", //request type
+                dataType: "json",
+                url:"getprofilbyId.php", //La page de traitement de l'édition
+                data: "idArtist="+id,
+                success:function(datas){
+                    var bornDate=datas.BORN_DATE;
+                    var sexe=datas.GENDER;
+                    //Chargement du formulaire
+                    document.getElementById("profil").src=datas.photo;
+
+                    if(sexe=='F') document.getElementById("sexe_f").checked=true;
+                    else if(sexe=='M') document.getElementById("sexe_m").checked=true;
+
+                    document.getElementById("nom").value=datas.LAST_NAME;
+                    document.getElementById("prenom").value=datas.FIRST_NAME;
+                    document.getElementById("date_naissance_jour").value=getDateNumber(bornDate)['day'];
+                    document.getElementById("date_naissance_mois").value=getDateNumber(bornDate)['month'];
+                    document.getElementById("date_naissance_annee").value=getDateNumber(bornDate)['year'];
+                    document.getElementById("adresse").value=datas.ADDRESS;
+                    document.getElementById("cp").value=datas.ZIP_CODE;
+                    document.getElementById("ville").value=datas.CITY;
+                    document.getElementById("mobile").value=datas.TEL;
+                    document.getElementById("langue").value=datas.LANGUAGE;
+                    document.getElementById("blog_name").value=datas.BLOG_NAME;
+                    document.getElementById("country").value=datas.COUNTRY;
+                }
+            });
+
+
+        }
+        function enregistrerArtiste() {
+            var id,gender,nom,prenom,dateNaiss,adresse,codePostal,ville,tel,langue,blog_name,country;
+            id='32';
+            
+            if(document.getElementById("sexe_f").checked == true)
+                gender=document.getElementById("sexe_f").value;
+            else
+                gender=document.getElementById("sexe_m").value;
+
+            nom= document.getElementById("nom").value;
+            prenom= document.getElementById("prenom").value;
+            dateNaissJour= document.getElementById("date_naissance_jour").value;
+            dateNaissMois= document.getElementById("date_naissance_mois").value;
+            dateNaissAnnee= document.getElementById("date_naissance_annee").value;
+            adresse= document.getElementById("adresse").value;
+            codePostal= document.getElementById("cp").value;
+            ville= document.getElementById("ville").value;
+            tel= document.getElementById("mobile").value;
+            langue= document.getElementById("langue").value;
+            blog_name=document.getElementById("blog_name").value;
+            country=document.getElementById("country").value;
+            $.ajax({
+                type: "POST", //request type
+                url:"editerprofil.php", //La page de traitement de l'édition
+                data: "id="+id+"&gender="+gender+"&nom="+nom+"&prenom="+prenom+"&dateNaissJour="+dateNaissJour+"&dateNaissMois="+dateNaissMois+"&dateNaissAnnee="+dateNaissAnnee+"&adresse="+adresse+"&codePostal="+codePostal+"&ville="+ville+"&tel="+tel+"&langue="+langue+"&blog_name="+blog_name+"&country="+country,
+                success:function(result){
+                 alert("Modification reussie");
+                }
+            });
+        }
+    </script>
+
 </head>
 
 <body>
@@ -424,7 +504,7 @@
 
             <div class="panel-body text-center">
                 <p class="text-lg text-semibold mar-no text-main">Nom artistique</p>
-                <img src="img/user.jpg" alt="Profile Picture" width="100" class="img-md img-circle mar-btm">
+                <img id='profil' src="" alt="Profile Picture" width="100" class="img-md img-circle mar-btm">
                 <hr>
                  <form method="post" action="index.php" enctype="multipart/form-data">
                  <input type="file" name="img"/>
@@ -485,7 +565,7 @@
                 <ul class="nav nav-tabs nav-justified" id="myTab">
                     <li class="active"><a data-toggle="tab" href="#informations-publics">Informations publics</a></li>
 
-                    <li class="dropdown"><a data-toggle="tab" href="#informations-privées">Informations privées</a></li>
+                    <li class="dropdown"><a data-toggle="tab" href="#informations-privees">Informations privées</a></li>
                 </ul>
                 
                 <div class="tab-content" id="myTabContent">
@@ -506,15 +586,15 @@
                               <div id="check_blog_name"></div>
                             </li>
                             <li> <span class="label_inline">Pays de résidence :</span>
-                              <input class="main" id="blog_name" type="text" name="blog_name">
-                              <div id="check_blog_name"></div>
+                              <input class="main" id="country" type="text" name="country">
+                              <div id="check_country"></div>
                             </li>
                           </ul>
                           <div class="clearfix"></div>
                         </div>
                     </div>
                     
-                    <div id="informations-privées" class="tab-pane fade active in">
+                    <div id="informations-privees" class="tab-pane fade in">
                        <div>
                           <ul class="info">
                             <li>
@@ -719,7 +799,8 @@
                           </ul>
                           <div class="clearfix"></div>
                           <div id="data_result" style="margin-left:168px;"></div>
-                          <a href="javascript:void(0);" class="btn btn-primary pull-left mt_10" onclick="setting.saveData(); return false;" style="margin:10px 0 20px 168px;"> <span class="label">Enregistrer</span> </a>
+                          <button class="btn btn-primary pull-left mt_10" style="margin:10px 0 20px 168px;" onclick="enregistrerArtiste()">Enregistrer </button>
+
                           <div class="clearfix"></div>
                         </div>
                     </div>
