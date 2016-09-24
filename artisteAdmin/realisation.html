@@ -31,7 +31,8 @@
     <link href="css/style-responsive.css" rel="stylesheet" />
     <link href="css/xcharts.min.css" rel=" stylesheet">
     <link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"> -->
+    <link href="css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css">
     <style type="text/css">
     body,td,th {
 	font-family: Open-sans, "Helvetica Neue", Arial, sans-serif;
@@ -46,6 +47,71 @@
     <script src="js/respond.min.js"></script>
     <script src="js/lte-ie7.js"></script>
     <![endif]-->
+	
+<script src="js/jquery.js"></script>
+	<script>	
+	$(document).ready(function() {
+    // Lorsque je soumets le formulaire
+    $('#formulaire').on('submit', function(e) {
+        e.preventDefault(); // J'empêche le navigateur de soumettre le formulaire
+		
+        var $form = $(this); // L'objet jQuery du formulaire
+    // Je récupère les valeurs
+		var formdata = (window.FormData) ? new FormData($form[0]) : null;
+        var data = (formdata !== null) ? formdata : $form.serialize();
+		var idArtist = '15';
+		var text = 0;
+		image = document.getElementById("image").value;
+        // Je vérifie une première fois pour ne pas lancer la requête HTTP
+        // si je sais que mon PHP renverra une erreur
+        if(image === '') {
+            alert('Selectionner une image et donner une description');
+        } else {
+            // Envoi de la requête HTTP en mode asynchrone
+            $.ajax({
+                url: $form.attr('action'), 
+                type: $form.attr('method'), 
+                contentType: false, 
+				processData: false, 
+				data: data,
+                success: function(data) { 
+                    text = data;
+					alert(text);
+					//if (text === 'Enregistrement effectué avec succès'){
+					location.assign(location.href);
+					//}
+					
+                }
+
+            });
+        }
+		
+    });
+	
+	
+	                $('#formulaire').find('input[name="image"]').on('change', function (e) {
+                    var files = $(this)[0].files;
+
+                    if (files.length > 0) {
+                        var file = files[0],
+                        $apercu = $('#apercu');
+                        $apercu.find('.thumbnail').removeClass('hidden');
+                        $apercu.find('img').attr('src', window.URL.createObjectURL(file));
+                    }
+                });
+				
+				
+				   // Bouton "Annuler"
+                $('#formulaire').find('button[type="reset"]').on('click', function (e) {
+                    e.preventDefault();
+
+                    $('#formulaire').find('input[name="image"]').val('');
+                    $('#apercu').find('.thumbnail').addClass('hidden');
+                });
+	
+});
+	
+	</script>
 </head>
 
 <body>
@@ -396,74 +462,130 @@
           <section class="wrapper">
   <div class="row">
 				<div class="col-lg-12">
-					<h3 class="page-header"><i class="fa fa-list-alt"></i> Réalisations</h3>
-					<ol class="breadcrumb">
-						<li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
+				  <h3 class="page-header"><em class="fa fa-list-alt"></em> Réalisations</h3>
+				  <ol class="breadcrumb">
+					  <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
 						<li><i class="fa fa-desktop"></i>A propos de lui</li>
 						<li><i class="fa fa-list-alt"></i>Réalisations</li>
 					</ol>
 				</div>
 			</div>
-             
-    <div class="row">
+   
+   <!-- Menu ajouter les réalisations -->
+   
+   
+   	<div class="row">
+        <div class="col-md-5 col-sm-8 col-xs-9 bhoechie-tab-container col-lg-11">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu">
+              <div class="list-group">
+                <a href="#" class="list-group-item active text-center">
+                  <h4 class="glyphicon glyphicon-upload"></h4><br/>Télécharger des oeuvres 
+                </a>
+                <a href="#" class="list-group-item text-center">
+                  <h4 class="glyphicon glyphicon-pencil"></h4><br/>Description 
+                </a>
+                <a href="#" class="list-group-item text-center">
+                  <h4 class="glyphicon glyphicon-check"></h4><br/>Aperçu
+                </a>
+                <a href="#" class="list-group-item text-center">
+                  <h4 class="glyphicon glyphicon-share"></h4><br/>Partager 
+                </a>
+                <a href="#" class="list-group-item text-center">
+                  <h4 class="glyphicon glyphicon-edit"></h4><br/>Critiquer d'art 
+                </a>
+              </div>
+              </div>
+            
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 bhoechie-tab">
                
-                <div class="col-xs-4">
-                <div class="container">
-  <div class="row">
-    <div class="col-md-1 col-sm-1"></div>
-		<div class="col-md-10 col-sm-10"><ul class="nav nav-tabs nav-justified" id="myTab1">
-		  <li class="active"><a data-toggle="tab" href="#avant_2000">Avant 2000</a></li>
-		  <li><a data-toggle="tab" href="#oeuvresde2001à2010">2001 à 2010</a></li>
-		  <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle" id="myTabDrop2" href="mouvement">2011 à aujourd' <strong class="caret"></strong> </a>
-		    <ul aria-labelledby="myTabDrop1" role="menu" class="dropdown-menu">
-      <li><a data-toggle="tab" href="#justifmouvementartistique">Artistique</a></li>
-      <li><a data-toggle="tab" href="#justifsociete">Société</a></li>
-      </ul>
-  </li>
+                <!-- flight section -->
+                
+                <div class="bhoechie-tab-content active">
+                    <center>
+                      <h3 class="glyphicon glyphicon-cloud-download" style="font-size:12em;color:#55518a"></h3><br/><br/>
+                      
+					  <form id="formulaire" method="post" action="realisation.php" enctype="multipart/form-data">						
+					  <input type="hidden" name="MAX_FILE_SIZE" value="10000000" /> 
+					  <input name="image" type="file" id="image" accept="image/*" />
+                                <div id="apercu" class="col-lg-10 col-lg-offset-2">
+                                    <div class="thumbnail hidden">
+                                        <img src="http://placehold.it/5" alt="">
+                                    </div>
+                                </div>
+                      <button class="btn btn-primary" type="submit">Télécharger des images</button>
+                      <button class="btn btn-default" type="reset">Annuler</button><br/> <br/>
+                      
+						<h3 style="color:#55518a">Description </h3><br/>
 
-</ul>
-<div class="tab-content" id="myTabContent1">
-  <div id="avant_2000" class="tab-pane fade active in">
-    <p><br>
-     <form method="post" action="reception.php" enctype="multipart/form-data">
-     <label for="icone">Icône du fichier (JPG, PNG ou GIF | max. 15 Ko) :</label><br />
-     <input type="file" name="icone" id="icone" /><br />
-     <label for="mon_fichier">Fichier (tous formats | max. 1 Mo) :</label><br />
-     <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
-     <input type="file" name="mon_fichier" id="mon_fichier" /><br />
-     <label for="titre">Titre du fichier (max. 50 caractères) :</label><br />
-     <input type="text" name="titre" value="Titre du fichier" id="titre" /><br />
-     <label for="description">Description de votre fichier (max. 255 caractères) :</label><br />
-     <textarea name="description" id="description"></textarea><br />
-     <input type="submit" name="submit" value="Envoyer" />
-</form>
-</p>
-  </div>
-  <div id="oeuvresde2001à2010" class="tab-pane fade">
-    <p><br>oeuvresde2001à2010</p>
-  </div>
-  <div id="justifmouvementartistique" class="tab-pane fade">
-    <p><br>
-      Artistique</p>
-  </div>
-  <div id="justifsociete" class="tab-pane fade">
-    <p><br>
-      Société</p>
-  </div>
-</div> </div>
-		<div class="col-md-1 col-sm-1"></div>
+		<textarea maxlength = "1024" name="description" id="description" rows="10" cols="50"> </textarea>  
+					                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      </form>                                                                                                                                                   
+      <br/> <hr/>                                                                               
+                                             
+                                             
+                                             
+                                              
+                    </center>
+                    
+                    
+                </div>
+                <!-- train section -->
+                <div class="bhoechie-tab-content">
+                    <center>
+                      <h1 class="glyphicon glyphicon-road" style="font-size:12em;color:#55518a"></h1>
+                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
+                      <h3 style="margin-top: 0;color:#55518a">Train Reservation</h3>
+                    </center>
+                </div>
+    
+                <!-- hotel search -->
+                <div class="bhoechie-tab-content">
+                    <center>
+                      <h1 class="glyphicon glyphicon-home" style="font-size:12em;color:#55518a"></h1>
+                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
+                      <h3 style="margin-top: 0;color:#55518a">Hotel Directory</h3>
+                    </center>
+                </div>
+                <div class="bhoechie-tab-content">
+                    <center>
+                      <h1 class="glyphicon glyphicon-cutlery" style="font-size:12em;color:#55518a"></h1>
+                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
+                      <h3 style="margin-top: 0;color:#55518a">Restaurant Diirectory</h3>
+                    </center>
+                </div>
+                <div class="bhoechie-tab-content">
+                    <center>
+                      <h1 class="glyphicon glyphicon-credit-card" style="font-size:12em;color:#55518a"></h1>
+                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
+                      <h3 style="margin-top: 0;color:#55518a">Credit Card</h3>
+                    </center>
+                </div>
+            </div>
+        </div>
   </div>
 </div>
-	
-</div>
-                
-                
-               
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <div class="row">
+    <div class="col-lg-3">
+      
+      
     </div>
-  
-  <!-- javascripts -->
+    <div class="col-lg-5"></div>
+    <div class="col-lg-4"></div>
+  </div>
+<!-- javascripts -->
     <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+    <script src="js/bootstrap-3.3.7.js"></script>
+
     <!-- nice scroll -->
     <script src="js/jquery.scrollTo.min.js"></script>
     <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
