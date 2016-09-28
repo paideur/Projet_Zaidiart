@@ -70,13 +70,14 @@
               </div>
             </div>
             <div id="login_form">
-              <form data-type="form-page">
+             
+              <form method="post" action="login.php" enctype="multipart/form-data">
                 <div class="index-form-groups clearfix">
                   <div class="form-group has-success">
-                    <input class="form-control" id="login_mail" type="text" placeholder="Adresse email" data-check="email" value="">
+                    <input class="form-control" id="login_mail" name="login_mail" type="text" placeholder="Adresse email" data-check="email" value="">
                   </div>
                   <div class="form-group">
-                    <input id="login_password" class="form-control" placeholder="Mot de passe" type="password" data-check="password">
+                    <input id="login_password" name="login_password" class="form-control" placeholder="Mot de passe" type="password" data-check="password">
                   </div>
                 </div>
                 <div class="index-form-recover"> <a class="evt-click" id="login_forgot_password" href="javascript:void(0)"> Mot <span style="color: #FFFFFF">de</span> passe oublié ? </a> </div>

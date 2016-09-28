@@ -88,3 +88,10 @@ function deleteSessionVars(){
 
     return null;
 }
+
+// Fonction pour generer le token pour l'envoi de mail et l'activation du compte
+
+    function str_random($length){
+        $alphabet = "0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
+        return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
+    }
