@@ -46,7 +46,7 @@ if(!empty($_POST)) {
         
         // On modifie les informations dans la base de données
         $req = $cnx->prepare("UPDATE t_users set GENDER=:genderArtist, LAST_NAME=:nomArtist,FIRST_NAME=:prenomArtist,BORN_DATE=:dateNaissArtist,ADDRESS=:adressArtist,ZIP_CODE=:codePostalArtist,
-            CITY=:villeArtist,TEL=:telArtist,LANGUAGE=:langueArtist,BLOG_NAME=:blogNameArtist,COUNTRY=:countryArtist where ID_USER=:idArtist");
+            CITY=:villeArtist,TEL=:telArtist,LANGUAGE=:langueArtist,BLOG_NAME=:blogNameArtist,PROF_ARTISTIQUE=:profArtist,COUNTRY=:countryArtist where ID_USER=:idArtist");
         $req->execute([
             ':genderArtist' => $_POST['gender'],
             ':nomArtist' => $_POST['nom'],
@@ -58,6 +58,7 @@ if(!empty($_POST)) {
             ':telArtist' => $_POST['tel'],
             ':langueArtist' => $_POST['langue'],
             ':blogNameArtist' => $_POST['blog_name'],
+            ':profArtist' => $_POST['prof_artistique'],
             ':countryArtist' => $_POST['country'],
             ':idArtist' => $idUser
         ]);
