@@ -96,7 +96,7 @@ function deleteSessionVars(){
         return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
     }
 
-<<<<<<< Updated upstream
+ 
 //Fonction pour uploader un fichier sur le serveur
 
 /*$target_dir: chemin du dossier dans le projet, utiliser chemin relatif
@@ -152,8 +152,7 @@ function uploadFileToServer($target_dir,$file_to_upload,$imgSize){
 
     
 }
-=======
-
+ 
 //Fonction deconnexion
 function deconnecter() {
 
@@ -174,4 +173,4 @@ function deconnecter() {
     session_start();
     session_destroy();
 }
->>>>>>> Stashed changes
+ 
