@@ -96,6 +96,7 @@ function deleteSessionVars(){
         return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
     }
 
+<<<<<<< Updated upstream
 //Fonction pour uploader un fichier sur le serveur
 
 /*$target_dir: chemin du dossier dans le projet, utiliser chemin relatif
@@ -151,3 +152,26 @@ function uploadFileToServer($target_dir,$file_to_upload,$imgSize){
 
     
 }
+=======
+
+//Fonction deconnexion
+function deconnecter() {
+
+    // desctruction des variables de session
+    $_SESSION = array();
+
+    // Retournez les paramètres de session
+    $params = session_get_cookie_params();
+    // Effacez le cookie.
+    setcookie(session_name(),
+        '', time() - 42000,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]);
+
+    // Détruisez la session
+    session_start();
+    session_destroy();
+}
+>>>>>>> Stashed changes
