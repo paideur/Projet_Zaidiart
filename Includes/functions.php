@@ -174,3 +174,147 @@ function deconnecter() {
     session_destroy();
 }
  
+ // fonction de creation de dossier pour chaque artiste pour l'upload de ses images
+function createdossier ($dossier)
+{
+	if (!file_exists("realisation/$dossier"))
+	{
+		mkdir("realisation/$dossier", 0777);
+		mkdir("realisation/$dossier/miniature", 0777);
+		mkdir("realisation/$dossier/document", 0777);
+	}
+}
+
+//Fonction d'upload des fichiers
+function upload_image($index,$record,$maxsize,$extensions)
+{
+	//session_start();
+   //presence d'image à uploader
+    if (empty($_FILES[$index]['tmp_name']))
+	 {	$statut = "Veuillez selectionner une image";
+		 return $statut;}
+   //fichier non uploadé correctement 
+     if ($_FILES[$index]['error'] > 0)
+	 {	$statut = "Erreur lors du transfert";
+		 return $statut;}
+   //taille limite
+     if ($_FILES[$index]['size'] > $maxsize) 
+		{	$statut = "Fichier trop volumineux ";
+		print_r($_FILES[$index]);
+		 return $statut;}
+   //verification de l'extension du fichier
+     $ext = strtolower (substr(strrchr($_FILES[$index]['name'],'.'),1));
+     if (!in_array($ext,$extensions)) 
+		{	$statut = "Votre fichier n'est pas une image";
+		 return $statut;}
+   //Déplacement sur le serveur
+   else 
+   {	
+   
+		$temp =$_FILES[$index]['tmp_name'];
+		$nom  =$_FILES[$index]['name'];
+		$description =$_POST['description'];
+		$createdate = $_POST['createdate'];
+		$title = $_POST['title'];
+		$longueur = $_POST['longueur'];
+		$largeur = $_POST['largeur'];
+		$hauteur = $_POST['hauteur'];
+		$poids = $_POST['poids'];
+		$technique = $_POST['technique'];
+		$idUser=$idUser=$_SESSION['id_user'];
+		//$usedata = $_GET['usedata'];
+		$usedata="oui";
+		$date = date('Y-m-d- H:i');
+		
+		//connexion et enregistrement des infos dans la BD
+			$cnx = new PDO('mysql:host=localhost;dbname=zaidiart', 'root', 'root', array (PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+			
+			$pdoReq = $cnx->prepare("INSERT INTO `t_achievements` (ID_ARTIST, TITLE, IMAGE, IMAGE_THUMB,DESCRIPTION1,CREATE_DATE,UPDATE_DATE,
+			`PATH`, `YEAR`, `CHARACTERISTICS`, `LENGTH`, `HEIGHT`, `WIDTH`, `TECHNIQUE`, `POIDS`, `CATEGORY`,`MEDIA`,`USE_DATA`)
+			VALUES (:id_artist,:image_name,:image,:mini,:description,:create_date,:update_date,:path,:year,:carac,:length,:height,:width,:tech,:poids,:categ,:media,:usedata)");
+			
+			$pdoExec = $pdoReq->execute(array(":id_artist"=>$idUser,":image_name"=>$title,":image"=>$record,":mini"=>$record."miniature"."/",":description"=>$description,":create_date"=>$date,":update_date"=>$date,
+											  ":path"=>$record,":year"=>$createdate,":carac"=>$nom,":length"=>$longueur,":height"=>$hauteur,"width"=>$largeur,":tech"=>$technique,
+											  ":poids"=>$poids,":categ"=>"tableau",":media"=>"tableau",":usedata"=>$usedata));
+
+			if (!$pdoExec)
+			{
+			$statut = "Enregistrement non effectué, veuillez recommencer ! <br/>";
+			return $statut;
+			}
+			
+			else
+			{
+				$last = $cnx->lastInsertId();
+				$file_name = $last.'.'.$ext;
+				if (move_uploaded_file($temp,$record.$file_name))				
+		        {
+					 // creation de l'image en fontion de l'extension
+					if ($ext == "jpg" or $ext == "jpeg" ) $source = imagecreatefromjpeg($record.$file_name);
+					else if ($ext == "png") $source = imagecreatefrompng($record.$file_name); 
+					else if ($ext == "gif") $source = imagecreatefromgif($record.$file_name);
+					$destination = imagecreatetruecolor(200, 150); // On crée la miniature vide
+
+					// Les fonctions imagesx et imagesy renvoient la largeur et la hauteur d'une image
+					$largeur_source = imagesx($source);
+					$hauteur_source = imagesy($source);
+					$largeur_destination = imagesx($destination);
+					$hauteur_destination = imagesy($destination);
+
+					// On crée la miniature
+					imagecopyresampled($destination, $source, 0, 0, 0, 0, $largeur_destination, $hauteur_destination, $largeur_source, $hauteur_source);
+
+					// On enregistre la miniature sous le même nom dans le dossier miniature de l'artiste"
+					imagejpeg($destination,$record."/"."miniature"."/".$file_name);	
+						
+					$statut = "Enregistrement effectué avec succès";
+					return $statut;
+				
+				}
+		
+				else
+				{
+					$statut = "upload non effectué, veuillez recommencer ! <br/>";
+					return $statut;
+				}
+		}
+	  
+   }
+    
+
+}
+
+//Fonction d'upload des fichiers
+function upload_files($doc,$save,$file_maxsize,$extension)
+
+{
+	
+   //presence de document à uploader
+    if (empty($_FILES[$doc]['tmp_name']))
+	 {	$statut = "vide";
+		 return $statut;}
+   //fichier non uploadé correctement 
+     if ($_FILES[$doc]['error'] > 0)
+	 {	$statut = "Erreur lors du transfert de votre document";
+		 return $statut;}
+   //taille limite
+     if ($_FILES[$doc]['size'] > $file_maxsize) 
+		{	$statut = "Document trop volumineux, veuillez reduire sa taille ou choisissez un autre document ";
+		 return $statut;}
+   //verification de l'extension du fichier
+     $ext = strtolower (substr(strrchr($_FILES[$doc]['name'],'.'),1));
+     if (!in_array($ext,$extension)) 
+		{	$statut = "Votre document doit être une image ou être de type pdf";
+		 return $statut;}
+   //Déplacement sur le serveur
+		$temp =$_FILES[$doc]['tmp_name'];
+		$nom  =$_FILES[$doc]['name'];
+		move_uploaded_file($temp,$save.$nom);
+		$statut="ok";
+		return $statut; 
+
+}
+
+
+?>
+ 

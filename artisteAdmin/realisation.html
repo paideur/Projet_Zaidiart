@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,7 +9,8 @@
     <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
     <link rel="shortcut icon" href="img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Zaidi Art - Artist Admin</title>
+    <title>Zaidi Art - Menu header et side bar</title>
+    
     <!-- zaidi admin template CSS -->
 
     <link href="css/zaidibase-theme.css" rel="stylesheet">
@@ -24,21 +26,19 @@
     <!-- owl carousel -->
     <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
     <link href="css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+    
+    	<!-- Animate CSS
+   ================================================== -->
+	<link rel="stylesheet" href="css/animate.min.css">
 
     <!-- Custom styles -->
 
-    <link href="css/zaidimodule-style.css"rel="stylesheet">
+    <link href="css/zaidiart_layout.css"rel="stylesheet">
     <link href="css/style-responsive.css" rel="stylesheet" />
     <link href="css/xcharts.min.css" rel=" stylesheet">
     <link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
-    <!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"> -->
-    <link href="css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
-    body,td,th {
-	font-family: Open-sans, "Helvetica Neue", Arial, sans-serif;
-	font-size: 14px;
-}
-    </style>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 -->
 
@@ -48,42 +48,62 @@
     <script src="js/lte-ie7.js"></script>
     <![endif]-->
 	
-<script src="js/jquery.js"></script>
+	<script src="js/jquery.js"></script>
 	<script>	
+
 	$(document).ready(function() {
+						
+	   $('#formulaire').click(function () {
+        //check if checkbox is checked
+        if ($('#accept_condition').is(':checked')) {
+
+            $('#save').removeAttr('disabled'); //enable input
+
+        } else {
+            $('#save').attr('disabled', true); //disable input
+        }
+    });
+	
     // Lorsque je soumets le formulaire
     $('#formulaire').on('submit', function(e) {
         e.preventDefault(); // J'empêche le navigateur de soumettre le formulaire
 		
         var $form = $(this); // L'objet jQuery du formulaire
     // Je récupère les valeurs
+		var usedata="non";
 		var formdata = (window.FormData) ? new FormData($form[0]) : null;
-        var data = (formdata !== null) ? formdata : $form.serialize();
-		var idArtist = '15';
+        var donnee = (formdata !== null) ? formdata : $form.serialize();
+		var idArtist = '20';
 		var text = 0;
 		image = document.getElementById("image").value;
+		if(document.getElementById("use_data").checked == true){
+		usedata="oui";}
         // Je vérifie une première fois pour ne pas lancer la requête HTTP
         // si je sais que mon PHP renverra une erreur
         if(image === '') {
-            alert('Selectionner une image et donner une description');
-        } else {
+            alert('Selectionner une image');	
+        } 
+		else 
+		{
+		
             // Envoi de la requête HTTP en mode asynchrone
             $.ajax({
-                url: $form.attr('action'), 
+                url: $form.attr('action'),
                 type: $form.attr('method'), 
                 contentType: false, 
 				processData: false, 
-				data: data,
+				data: donnee,
                 success: function(data) { 
                     text = data;
 					alert(text);
-					//if (text === 'Enregistrement effectué avec succès'){
-					location.assign(location.href);
-					//}
+					if (text === 'Enregistrement effectué avec succès'){
+					location.href = "realisation.html";
+					}
 					
                 }
 
             });
+			
         }
 		
     });
@@ -103,15 +123,18 @@
 				
 				   // Bouton "Annuler"
                 $('#formulaire').find('button[type="reset"]').on('click', function (e) {
-                    e.preventDefault();
+                    //e.preventDefault();
 
                     $('#formulaire').find('input[name="image"]').val('');
                     $('#apercu').find('.thumbnail').addClass('hidden');
                 });
-	
+				
+		
 });
-	
+
+
 	</script>
+    
 </head>
 
 <body>
@@ -125,11 +148,12 @@
         </div>
 
         <!--logo start-->
-        <a href="index.html" class="logo">Artiste <span class="lite">Admin</span></a>
+        <a href="vuedensemble.html" class="logo">HESTART <span class="lite">ARTISTE</span></a>
         <!--logo end-->
 
+       <!--  search form start -->
+       
         <div class="nav search-row" id="top_menu">
-            <!--  search form start -->
             <ul class="nav top-menu">
                 <li>
                     <form class="navbar-form">
@@ -137,11 +161,13 @@
                     </form>
                 </li>
             </ul>
-            <!--  search form end -->
         </div>
+        
+        <!--  search form end -->
+        
+        <!-- notificatoin dropdown start-->
 
         <div class="top-nav notification-row">
-            <!-- notificatoin dropdown start-->
             <ul class="nav pull-right top-menu">
 
                 <!-- task notificatoin start -->
@@ -159,7 +185,7 @@
                             <a href="#">
                                 <div class="task-info">
                                     <div class="desc">En aterier </div>
-                                    <div class="percent">00%</div>
+                                    <div class="percent">90%</div>
                                 </div>
                                 <div class="progress progress-striped">
                                     <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
@@ -172,7 +198,7 @@
                             <a href="#">
                                 <div class="task-info">
                                     <div class="desc">
-                                        Exposition 1
+                                        Exposition 
                                     </div>
                                     <div class="percent">20%</div>
                                 </div>
@@ -186,7 +212,7 @@
                         <li>
                             <a href="#">
                                 <div class="task-info">
-                                    <div class="desc">Digital Marketing</div>
+                                    <div class="desc">Marketing Relationnel</div>
                                     <div class="percent">80%</div>
                                 </div>
                                 <div class="progress progress-striped">
@@ -224,18 +250,14 @@
                             </a>
                         </li>
                         <li class="external">
-                            <a href="#">See All Tasks</a>
+                            <a href="#">tous </a>
                         </li>
                     </ul>
                 </li>
                 <!-- task notificatoin end -->
                 <!-- inbox notificatoin start-->
-                <li id="mail_notificatoin_bar" class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="icon-envelope-l"></i>
-                        <span class="badge bg-important">5</span>
-                    </a>
-                    <ul class="dropdown-menu extended inbox">
+                <li id="mail_notificatoin_bar" class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle" href="#"> <em class="icon-envelope-l"></em> <span class="badge bg-important">5</span> </a>
+                  <ul class="dropdown-menu extended inbox">
                         <div class="notify-arrow notify-arrow-blue"></div>
                         <li>
                             <p class="blue">You have 5 new messages</p>
@@ -289,7 +311,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">See all messages</a>
+                            <a href="#">Voir tous les messages</a>
                         </li>
                     </ul>
                 </li>
@@ -304,7 +326,7 @@
                     <ul class="dropdown-menu extended notification">
                         <div class="notify-arrow notify-arrow-blue"></div>
                         <li>
-                            <p class="blue">You have 4 new notifications</p>
+                            <p class="blue">Vous avez des notifications</p>
                         </li>
                         <li>
                             <a href="#">
@@ -335,7 +357,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">See all notifications</a>
+                            <a href="#">Voir tous</a>
                         </li>
                     </ul>
                 </li>
@@ -389,13 +411,8 @@
             <!-- sidebar menu start-->
             
             <ul class="sidebar-menu">
-                <li class="active">
-                    <a class="" href="index.html">
-                        <i class="icon_house_alt"></i>
-                        <span>Tableau de bord</span>
-                    </a>
-                </li>
-                <li class="sub-menu"><a href="javascript:;"> <em class="icon_document_alt"></em> Marché de l'art <span class="menu-arrow arrow_carrot-right"></span> </a>
+              <li class="active"> <a href="vue d'ensemble.html"> <em class="glyphicon glyphicon-dashboard"></em> <span>Vue d'ensemble</span> </a> </li>
+              <li class="sub-menu"><a href="javascript:;"> <em class="glyphicon glyphicon-scale"></em> Marché de l'art <span class="menu-arrow arrow_carrot-right"></span> </a>
                     <ul class="sub">
                         <li><a class="" href="oeuvres en vente.html">Oeuvres en vente</a></li>
                         <li><a class="" href="sur le marche.html">Sur le marché</a></li>
@@ -403,7 +420,7 @@
                 </li>
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
-                        <i class="icon_desktop"></i>
+                        <i class="glyphicon glyphicon-education"></i>
                         <span>A propos de lui</span>
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
@@ -415,16 +432,9 @@
                 </li>
                 <li>
                     <a class="" href="mediaactualite.html">
-                        <i class="icon_genius"></i>
+                        <i class="glyphicon glyphicon-tasks"></i>
                         <span>Média/Actualité</span>
                     </a>
-                </li>
-                <li>
-                    <a class="" href="statistique.html">
-                        <i class="icon_piechart"></i>
-                        <span>Statistiques</span>
-                    </a>
-
                 </li>
 
                 <li class="sub-menu">
@@ -454,8 +464,7 @@
         </div>
     </aside>
     <!--sidebar end-->
-
-
+    
 
       <!--main content start-->
       <section id="main-content">
@@ -481,10 +490,10 @@
                 <a href="#" class="list-group-item active text-center">
                   <h4 class="glyphicon glyphicon-upload"></h4><br/>Télécharger des oeuvres 
                 </a>
-                <a href="#" class="list-group-item text-center">
+                <a href="realisation.html#description" class="list-group-item text-center">
                   <h4 class="glyphicon glyphicon-pencil"></h4><br/>Description 
                 </a>
-                <a href="#" class="list-group-item text-center">
+                <a href="printmini.php" class="list-group-item text-center">
                   <h4 class="glyphicon glyphicon-check"></h4><br/>Aperçu
                 </a>
                 <a href="#" class="list-group-item text-center">
@@ -501,63 +510,411 @@
                 <!-- flight section -->
                 
                 <div class="bhoechie-tab-content active">
-                    <center>
-                      <h3 class="glyphicon glyphicon-cloud-download" style="font-size:12em;color:#55518a"></h3><br/><br/>
-                      
-					  <form id="formulaire" method="post" action="realisation.php" enctype="multipart/form-data">						
-					  <input type="hidden" name="MAX_FILE_SIZE" value="10000000" /> 
-					  <input name="image" type="file" id="image" accept="image/*" />
-                                <div id="apercu" class="col-lg-10 col-lg-offset-2">
-                                    <div class="thumbnail hidden">
-                                        <img src="http://placehold.it/5" alt="">
-                                    </div>
-                                </div>
-                      <button class="btn btn-primary" type="submit">Télécharger des images</button>
-                      <button class="btn btn-default" type="reset">Annuler</button><br/> <br/>
-                      
-						<h3 style="color:#55518a">Description </h3><br/>
+<center>
 
-		<textarea maxlength = "1024" name="description" id="description" rows="10" cols="50"> </textarea>  
-					                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-      </form>                                                                                                                                                   
+ <form id="formulaire" method="post" action="realisation.php" enctype="multipart/form-data">
+ 
+   <!-- <h6 class="glyphicon glyphicon-cloud-download" style="font-size:6em;color:#cb0000"> </h6> -->
+   <br/><br/>
+   
+	<input class="form-control-file" name="image" accept="image/*" id="image" type="file" >
+		<button class="btn btn-primary" type="button">Télécharger des images</button>
+			<div class="form-group">
+				<div id="apercu" class="col-lg-10 col-lg-offset-2" >
+						<img src="#" width="300" class="thumbnail hidden" >
+				</div>
+			</div>
+				
+	<h3 style="color:#cb0000">Description </h3><br/>
+	
+  <div class="form-group">
+    <label for="exampleInputEmail1">Title et date de création de l'oeuvre</label>
+    <input type="text" class="form-control" name="title" id="title" maxlength = "50" aria-describedby="emailHelp" placeholder="Title de l'oeuvre"></br>
+    <input type="text" class="form-control" name="createdate"  id="createdate" maxlength = "10" aria-describedby="emailHelp" placeholder="Date de création (par exemple 01/12/2000)"></br>
+    <small id="emailHelp" class="form-text text-muted">Le titre n'est obligatoire, mais nous vous conseillons d'attribuer un ou plusieurs titres significatifs pour l’ œuvre. Il s’agit d’un identifiant de l’œuvre</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Dimensions</label>
+	  <input type="text" class="form-control" name="longueur" id="longueur" maxlength = "10" placeholder="Longueur (en cm)"></div></br>
+     <input type="text" class="form-control" name="largeur" id="largeur" maxlength = "10" placeholder="Largeur (en cm)"></br>
+     <input type="text" class="form-control" name="hauteur" id="hauteur" maxlength = "10" placeholder="Hauteur (en cm)"></br>
+      <input type="text" class="form-control" name="poids" id="poids" maxlength = "10" placeholder="Poids (en g)"></br>
+  
+  <div class="form-group">
+    <label for="exampleSelect1">Technique (sélectionnez dans la liste suivante les techniques utilisée) </label>
+    <select class="form-control" name="technique" id="technique">
+      <option>Aquarelle sur papier</option>
+      <option>Aquarelle gouachée sur papier</option>
+      <option>Crayon sur papier</option>
+      <option>Crayon sur carton</option>
+      <option>Crayon sur calque</option>
+      <option>Fusain sur papier </option>
+      <option>Fusain sur calque </option>
+      <option>Fusain sur carton</option>
+      <option>Huile sur papier</option>
+      <option>Huile marouflée sur</option>
+      <option>Bois </option>
+      <option>Huile marouflée sur  </option>
+      <option>Pastel</option>
+      <option>Sanguine</option>
+      <option>Bronze</option>
+      <option>Marbre</option>
+      <option>Autre</option>
+    </select>
+  </div>
+  
+  <div class="form-group" id="describe">
+    <label for="exampleTextarea">Description</label>
+    <textarea class="form-control" maxlength = "1024" name="description" id="description" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">Autres élements</label>
+    <input type="file" class="form-control-file" name="document" id="document" aria-describedby="fileHelp" accept="image/*, application/pdf">
+	
+    <small id="fileHelp" class="form-text text-muted">Transmettre d'autres élements jugés importants (comme par exemple le certificat d'authenticité, etc)</small>
+  </div>
+  <fieldset class="form-group">
+    <legend>Conditions de publication</legend>
+    <div class="form-check">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" name="accept_condition" id="accept_condition">
+			<a href="conditonutilisation.html" target="_blank">
+				<font color = "ff3333">
+				Accepter les condtions d'utilisation du site
+				</font>
+			</a>
+      </label>
+    </div>
+    <div class="form-check">
+    <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" name="use_data" id="use_data">
+			<a href="usedata.html" target="_blank">
+				<font color = "ff3333">
+				Accepter l'utilisation de vos données par le site pour des raisons commerciales
+				</font>
+			</a> 
+	</label>
+    </div>
+  </fieldset>
+  <div class="form-check">
+   
+  </div>
+  <button type="submit" class="btn btn-primary" name="save" id="save">Sauvegarder</button>
+  <button type="reset" class="btn btn-default btn-danger">Annuler</button>
+
+</form>                                                                                                                                                                            
       <br/> <hr/>                                                                               
-                                             
-                                             
-                                             
-                                              
-                    </center>
-                    
-                    
-                </div>
-                <!-- train section -->
+                                                            
+	  </center>
+</div>                                                                                                                                                                                                                                                                                                                                   <!-- Aperçu des élements de la description de l'oeuvres qui seront visible par le public  -->
+               
                 <div class="bhoechie-tab-content">
                     <center>
-                      <h1 class="glyphicon glyphicon-road" style="font-size:12em;color:#55518a"></h1>
-                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
-                      <h3 style="margin-top: 0;color:#55518a">Train Reservation</h3>
+                   <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                             Aperçu de description 
+                          </header>
+                          
+                          <table class="table table-striped table-advance table-hover">
+                           <tbody>
+                              <tr>
+                                 <th><i></i>Title</th>
+                                 <th><i></i> Année</th>
+                                 <th><i></i> Description</th>
+                                 <th><i></i>Technique</th>
+                                 <th><i></i> Dimension</th>
+                                 <th><i></i>Modifier</th>
+                              </tr>
+                              <tr>
+                                 <td>Three bodys</td>
+                                 <td>2014</td>
+                                 <td> Couleur, noire, couleur café, couleur blanche cote-à-côte dans un subtil mélange qui rehausse l'effet de transparence.</td>
+                                 <td> technique mixte // huile,acrylique, jus de café sur toile</td>
+                                 <td>138 x 100 cm  </td>
+                                 <td>
+                                  <div class="btn-group">
+                                      <a class="btn btn-primary" href="#"><i class="icon_plus_alt2"></i></a>
+                                      <a class="btn btn-success" href="#"><i class="icon_check_alt2"></i></a>
+                                      <a class="btn btn-danger" href="#"><i class="icon_close_alt2"></i></a>
+                                  </div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                 <td>Alter Ego</td>
+                                 <td>2015</td>
+                                 <td>Sans commentaires</td>
+                                 <td>technique mixte // collage, jus de café sur toile</td>
+                                 <td>100 x 138 cm</td>
+                                 <td>
+                                  <div class="btn-group">
+                                      <a class="btn btn-primary" href="#"><i class="icon_plus_alt2"></i></a>
+                                      <a class="btn btn-success" href="#"><i class="icon_check_alt2"></i></a>
+                                      <a class="btn btn-danger" href="#"><i class="icon_close_alt2"></i></a>
+                                  </div>
+                                  </td>
+                              </tr>
+                                    
+                           </tbody>
+                        </table>
+                      </section>
+                  </div>   
                     </center>
                 </div>
     
-                <!-- hotel search -->
+                <!-- Aperçu-->
                 <div class="bhoechie-tab-content">
                     <center>
-                      <h1 class="glyphicon glyphicon-home" style="font-size:12em;color:#55518a"></h1>
-                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
-                      <h3 style="margin-top: 0;color:#55518a">Hotel Directory</h3>
+                       <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Aperçu par le public</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Projects Row -->
+        <div class="row">
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Projects Row -->
+        <div class="row">
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+        </div>
+
+        <!-- Projects Row -->
+        <div class="row">
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="portfolio-item.html">Project Name</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Pagination -->
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <ul class="pagination">
+                    <li>
+                        <a href="#">&laquo;</a>
+                    </li>
+                    <li class="active">
+                        <a href="#">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">4</a>
+                    </li>
+                    <li>
+                        <a href="#">5</a>
+                    </li>
+                    <li>
+                        <a href="#">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
                     </center>
                 </div>
                 <div class="bhoechie-tab-content">
                     <center>
-                      <h1 class="glyphicon glyphicon-cutlery" style="font-size:12em;color:#55518a"></h1>
-                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
-                      <h3 style="margin-top: 0;color:#55518a">Restaurant Diirectory</h3>
+                      <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                             Aperçu de description 
+                          </header>
+                          
+                          <table class="table table-striped table-advance table-hover">
+                           <tbody>
+                              
+                              <tr>
+                                 
+                                 <td><button type="button" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-th-list"></span>
+        </button></td>
+                                 <td>Facebook</td>
+                                 <td> </td>
+                                 
+                               <td>
+                                  <div class="btn-group">
+                                      <a class="btn btn-primary" href="#"><i></i>Lien</a>
+                                  </div>
+                                  </td>
+                              </tr>
+                              
+                              <tr>
+                                 <td><button type="button" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-th-list"></span>
+        </button></td>
+                                 <td>Youtube</td>
+                                 
+                                 <td>
+                                  <div class="btn-group">
+                                      <a class="btn btn-primary" href="#"><i></i>Lien</a>
+                                      
+                                  </div>
+                                  </td>
+                              </tr>
+                                    
+                           </tbody>
+                        </table>
+                      </section>
+                  </div>   
                     </center>
                 </div>
                 <div class="bhoechie-tab-content">
                     <center>
-                      <h1 class="glyphicon glyphicon-credit-card" style="font-size:12em;color:#55518a"></h1>
-                      <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
-                      <h3 style="margin-top: 0;color:#55518a">Credit Card</h3>
+                       <!-- Widget content -->
+                  <div class="padd sscroll">
+                    
+                    <ul class="chats">
+
+                      <!-- Chat by us. Use the class "by-me". -->
+                      <li class="by-me">
+                        <!-- Use the class "pull-left" in avatar -->
+                        <div class="avatar pull-left">
+                          <img src="img/user.jpg" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                          <!-- In meta area, first include "name" and then "time" -->
+                          <div class="chat-meta">John Smith <span class="pull-right">3 hours ago</span></div>
+                          Vivamus diam elit diam, consectetur dapibus adipiscing elit.
+                          <div class="clearfix"></div>
+                        </div>
+                      </li> 
+
+                      <!-- Chat by other. Use the class "by-other". -->
+                      <li class="by-other">
+                        <!-- Use the class "pull-right" in avatar -->
+                        <div class="avatar pull-right">
+                          <img src="img/user.jpg" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                          <!-- In the chat meta, first include "time" then "name" -->
+                          <div class="chat-meta">3 hours ago <span class="pull-right">Jenifer Smith</span></div>
+                          Vivamus diam elit diam, consectetur fconsectetur dapibus adipiscing elit.
+                          <div class="clearfix"></div>
+                        </div>
+                      </li>   
+
+                      <li class="by-me">
+                        <div class="avatar pull-left">
+                          <img src="img/user.jpg" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                          <div class="chat-meta">John Smith <span class="pull-right">4 hours ago</span></div>
+                          Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur dapibus adipiscing elit.
+                          <div class="clearfix"></div>
+                        </div>
+                      </li>  
+
+                      <li class="by-other">
+                        <!-- Use the class "pull-right" in avatar -->
+                        <div class="avatar pull-right">
+                          <img src="img/user.jpg" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                          <!-- In the chat meta, first include "time" then "name" -->
+                          <div class="chat-meta">3 hours ago <span class="pull-right">Jenifer Smith</span></div>
+                          Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur dapibus adipiscing elit.
+                          <div class="clearfix"></div>
+                        </div>
+                      </li>                                                                                  
+
+                    </ul>
+
+                  </div>
                     </center>
                 </div>
             </div>
