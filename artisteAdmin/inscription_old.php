@@ -7,7 +7,6 @@ require('../Includes/db.php');
 require('../Includes/functions.php');
  
 require('../Includes/PHPMailer_v5.1/class.phpmailer.php');
-require('../Includes/PHPMailer_v5.1/class.smtp.php');
  
 // Vérification des erreurs lors du remplissage du formulaire
 
@@ -104,23 +103,17 @@ require('../Includes/PHPMailer_v5.1/class.smtp.php');
 
      $mail = new PHPmailer();
      $mail->IsSMTP(); 
-	 $mail->SetLanguage("en", "../phpmailer/language/");
-	 
-	 $mail->SMTPAuth   = true;                  // enable SMTP authentication
-	 $mail->SMTPSecure = "ssl"; 
-	 
+     $mail->SetLanguage("en", "../phpmailer/language/");
      $mail->Host='smtp.gmail.com';
-     $mail->Port = 465;
-	 $mail->Username   = "zaidiartinternational@gmail.com";  // GMAIL username
-	 $mail->Password   = "Zaidiart1234";            // GMAIL password
-     //$mail ->IsMail();
-     $mail->From= 'zaidiartinternational@gmail.com'; 
+     $mail->Port = 587;
+     $mail ->IsMail();
+     $mail->From= 'opclaver@gmail.com'; 
      $mail->FromName= 'ZAIDIART' ;
      $mail->AddAddress ($adresse);
-     $mail->AddReplyTo('zaidiartinternational@gmail.com');   
+     $mail->AddReplyTo('opclaver@gmail.com');   
      $mail->Subject= 'Mail de confirmation de votre inscription a zaidiart'; 
      $mail->Body= "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp://localhost:8888/Projet_Zaidiart/artisteAdmin/confirm_compte.php?id=$user_id&token=$token";
-       
+        
     if(!$mail->Send()){ //Teste le return code de la fonction
       echo $mail->ErrorInfo; //Affiche le message d'erreur (ATTENTION:voir section 7)
       echo "<script type='text/javascript'>alert('ErrorInfo : ''".$mail->ErrorInfo."');document.location.replace('../accueil/index.html');</script>";
@@ -137,6 +130,22 @@ require('../Includes/PHPMailer_v5.1/class.smtp.php');
     exit(); 
     
 }   
+/*
+        mail($_POST['register_form_mail_input'], 'Confirmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp://localhost:8888/Projet_Zaidiart/artisteAdmin/confirm_compte.php?id=$user_id&token=$token");
+          
+       if($_POST['register_form_categorie_input']="Particulier"){
+
+             echo "<script type='text/javascript'>alert('Un email de confirmation vous a été envoyé');document.location.replace('../accueil/index.html');</script>";
+
+        }
+        else {
+          
+             echo "<script type='text/javascript'>alert('Un email de confirmation vous a été envoyé');document.location.replace('../accueil/index.html');</script>";
+
+        }
+
+        exit(); 
+    } */
     else
     {
         // Affichage des erreurs
