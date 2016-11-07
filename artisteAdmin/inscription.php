@@ -93,7 +93,7 @@ require('../Includes/PHPMailer_v5.1/class.smtp.php');
             ':zip_code'     => null,
             ':city'         => null,
             ':country'      => null,
-            ':photo'        => null,
+            ':photo'        => "images/default.jpg", //Avatar par defaut de l'utilisateur
             ':photo_thumb'  => null,
             ':statut_compte' => 0,
             ':artiste_name' => $_POST['register_form_username_input']

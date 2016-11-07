@@ -8,38 +8,20 @@
 require('../Includes/db.php');
 
 //Selection de l'artiste
-$idUser=$_POST['id'];
-$req=$cnx->prepare("Select * from t_users where ID_USER=:idUser");
-$req->execute([':idUser' => $idUser]);
-$artiste= $req->fetch();
+$idUser=$_SESSION['id_user'];
 
 //Traitement de la modification
-if(!empty($_POST)) {
-    $errors = array();
-    if (empty($_POST['email']) ) {
-        $errors['email'] = "Veuillez entrer un email correct";
-        //echo "OK2";
-    }
-    if (empty($_POST['mtpasse'])) {
-        $errors['mtpasse'] = "Veuillez entrer un mot de passe correct";
-        //echo "OK3";
-    }
-    
-    if (empty($errors)) {
-        // On modifie les informations dans la base de données
-        $req = $cnx->prepare("UPDATE t_users set EMAIL=:emailArtist,PASSWORD=:passwordArtist where ID_USER=:idArtist");
-        $req->execute([
-            ':emailArtist' => $_POST['email'],
-            ':passwordArtist' => $_POST['mtpasse'],
-            ':idArtist' => $idUser
-        ]);
+if(!empty($_POST)) {   
+    // On ne sauvegardera pas le mot de passe en clair dans la base mais plutôt un hash
+    $password = password_hash($_POST['mtpasse'], PASSWORD_BCRYPT); 
 
-        // On redirige l'utilisateur vers la page index avec un message flash
-        //$_SESSION['flash']['success'] = 'Informations modifiées avec succès';
-
-        //echo "<script type='text/javascript'>document.location.replace('listerBeneficiaire.php');</script>";
-        //exit();
-    }
+    // On modifie les informations dans la base de données
+    $req = $cnx->prepare("UPDATE t_users set EMAIL=:emailArtist,PASSWORD=:passwordArtist where ID_USER=:idArtist");
+    $req->execute([
+        ':emailArtist' => $_POST['email'],
+        ':passwordArtist' => $password,
+        ':idArtist' => $idUser
+    ]);
 }
 
 ?>

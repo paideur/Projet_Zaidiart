@@ -104,51 +104,77 @@ $file_to_upload: attribut name du fichier dans html
 $imgSize: taille maximale du fichier à uploader
 */
 
+//Code de retour:
+/*
+
+0->File is not an image
+1->Upload OK
+2->Sorry, file is not selected.
+3->Sorry, your file is too large
+4->Sorry, only JPG, JPEG, PNG & GIF files are allowed.
+5->Sorry, there was an error uploading your file.
+
+*/
 function uploadFileToServer($target_dir,$file_to_upload,$imgSize){
 
     //$target_dir = "images/";
     $target_file = $target_dir . basename($_FILES[$file_to_upload]["name"]);
     $uploadOk = 1;
+    $errCod=1;
     $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
     // Check if image file is a actual image or fake image
     if(isset($_POST["submit"])) {
         $check = getimagesize($_FILES[$file_to_upload]["tmp_name"]);
         if($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
+            //echo "File is an image - " . $check["mime"] . ".";
             $uploadOk = 1;
         } else {
-            echo "File is not an image.";
+            //echo "File is not an image.";
             $uploadOk = 0;
+            $errCod=0;
+            return $errCod;
         }
     }
+    //Verifier si aucune image n'est selectionnée
+    if(empty($_FILES[$file_to_upload]['name'])){
+            //echo "File is not an image.";
+            $uploadOk = 0;
+            $errCod=2;
+            return $errCod;
+    }   
     // Check if file already exists
     if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
+        //echo "Sorry, file already exists.";
         $uploadOk = 0;
+        return $target_dir.basename($_FILES[$file_to_upload]['name']);
     }
     // Check file size
-    if ($_FILES["fileToUpload"]["size"] > $imgSize) {
-        echo "Sorry, your file is too large.";
+    if ($_FILES[$file_to_upload]["size"] > $imgSize) {
+        //echo "Sorry, your file is too large.";
         $uploadOk = 0;
+        $errCod=3;
     }
     // Allow certains file formats
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-    && $imageFileType != "gif" ) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    && $imageFileType != "gif" && $imageFileType != "JPG" && $imageFileType != "PNG)" 
+    && $imageFileType != "JPEG" && $imageFileType != "GIF" ){
+        //return "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
         $uploadOk = 0;
+        $errCod=4;
     }
-    // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
-    } else {
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 1) {
+
         if (move_uploaded_file($_FILES[$file_to_upload]["tmp_name"], $target_file)) {
             //echo "The file ". basename( $_FILES[$file_to_upload]["name"]). " has been uploaded.";
            return $target_dir.basename($_FILES[$file_to_upload]['name']);
         } else {
-            echo "Sorry, there was an error uploading your file.";
+            //echo "Sorry, there was an error uploading your file.";
+            $errCod=5;
         }
     }
+    return $errCod;  //retourner le code erreur en cas d'erreur
 
     
 }

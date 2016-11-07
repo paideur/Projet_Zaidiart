@@ -71,6 +71,28 @@
 
             return dateNumbers;
         }
+        //Fonction pour valider adresse email
+        function validateEmail(email) {
+          var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(email);
+        }
+
+        //Fonction de validation du mot de passe
+        function validateMotPasse(mp) {
+          var re = /^[a-z0-9]{6,}$/i;
+          return re.test(mp);
+        }
+        //Fonction de validation d'un champs texte 
+        function validerChampTexte(value){
+            var re = /^[a-zA-Z-9_]+$/;
+            return re.test(value);
+        }
+
+        //Fonction de validation d'un champs numeric 
+        function validerChampNumeric(value){
+            var re = /[1-9][0-9]*|0/;
+            return re.test(value);
+        }
 
         function loadArtiste(){
             //Recuperer les données en JSON
@@ -115,7 +137,8 @@
 
         function enregistrerArtiste() {
             var id,gender,nom,prenom,dateNaiss,adresse,codePostal,ville,tel,langue,blog_name,country;
-            id='32';
+            var errors =[]; //Contient les erreurs de saisies
+            var cpt=0; //Compteur du tableau d'erreurs
             
             if(document.getElementById("sexe_f").checked == true)
                 gender=document.getElementById("sexe_f").value;
@@ -123,49 +146,84 @@
                 gender=document.getElementById("sexe_m").value;
 
             nom= document.getElementById("nom").value;
+            if(!validerChampTexte(nom)){
+                errors[cpt]="Veuillez saisir un nom valide";
+                cpt++;
+            }
             prenom= document.getElementById("prenom").value;
+            if(!validerChampTexte(prenom)){
+                errors[cpt]="Veuillez saisir un prenom valide";
+                cpt++;
+            }
             dateNaissJour= document.getElementById("date_naissance_jour").value;
             dateNaissMois= document.getElementById("date_naissance_mois").value;
             dateNaissAnnee= document.getElementById("date_naissance_annee").value;
             adresse= document.getElementById("adresse").value;
             codePostal= document.getElementById("cp").value;
+            if(!validerChampNumeric(codePostal)){
+                errors[cpt]="Veuillez saisir un code postal valide";
+                cpt++;
+            }
             ville= document.getElementById("ville").value;
             tel= document.getElementById("mobile").value;
+            if(validerChampTexte(tel) && !validerChampNumeric(tel) ){
+                errors[cpt]="Veuillez saisir un telephone postal valide";
+                cpt++;
+            }
             langue= document.getElementById("langue").value;
             blog_name=document.getElementById("blog_name").value;
             prof_artistique=document.getElementById("prof_artistique").value;
             country=document.getElementById("country").value;
-            $.ajax({
-                type: "POST", //request type
-                url:"editerprofil.php", //La page de traitement de l'édition
-                data: "id="+id+"&gender="+gender+"&nom="+nom+"&prenom="+prenom+"&dateNaissJour="+dateNaissJour+"&dateNaissMois="+dateNaissMois+"&dateNaissAnnee="+dateNaissAnnee+"&adresse="+adresse+"&codePostal="+codePostal+"&ville="+ville+"&tel="+tel+"&langue="+langue+"&blog_name="+blog_name+"&prof_artistique="+prof_artistique+"&country="+country,
-                success:function(result){
-                 alert("Modification reussie");
-                 loadArtiste();
+            //Controle des champs obligatoires
+            if(errors!=""){
+               // Affichage des erreurs
+                for(var i=0; i< errors.length; i++){
+                     alert("Formulaire incorrect \n\n"+errors[i]);
                 }
-            });
-        }
 
+            }else{
+                $.ajax({
+                    type: "POST", //request type
+                    url:"editerprofil.php", //La page de traitement de l'édition
+                    data: "gender="+gender+"&nom="+nom+"&prenom="+prenom+"&dateNaissJour="+dateNaissJour+"&dateNaissMois="+dateNaissMois+"&dateNaissAnnee="+dateNaissAnnee+"&adresse="+adresse+"&codePostal="+codePostal+"&ville="+ville+"&tel="+tel+"&langue="+langue+"&blog_name="+blog_name+"&prof_artistique="+prof_artistique+"&country="+country,
+                    success:function(result){
+                     alert("Modification reussie");
+                     loadArtiste();
+                    }
+                });
+            }
+        }
+        //Fonction asynchrone pour la mise a jour de la connexion(email et mot de passe)
         function majConnexion() {
             var id,email, mtpasse;
-            id='32';
             
             email= document.getElementById("exampleInputEmail2").value;
             mtpasse= document.getElementById("exampleInputPassword2").value;
-        
-            $.ajax({
-                type: "POST", //request type
-                url:  "editerprofil_connexion.php", //La page de traitement de l'édition
-                data: "id="+id+"&email="+email+"&mtpasse="+mtpasse,
-                success:function(result){
-                 alert("Modification reussie");
-                }
-            });
+            
+            //Verification de la saisie
+            if(!validateEmail(email)){
+                alert("L'email saisie est incorrect!!");
+            }else if(!validateMotPasse(mtpasse)){
+                alert("Le mot de passe saisie est incorrect!!");
+            }else{
+
+                $.ajax({
+                    type: "POST", //request type
+                    url:  "editerprofil_connexion.php", //La page de traitement de l'édition
+                    data: "email="+email+"&mtpasse="+mtpasse,
+                    success:function(result){
+                         alert("Modification reussie");
+                         //Vider champs
+                         document.getElementById("exampleInputEmail2").value="";
+                         document.getElementById("exampleInputPassword2").value="";
+                    }
+                });
+            }
         }
 
+        //Fonction asynchrone pour changer la photo de profil de l'artiste
         $('#uploadForm').on('submit', function (e) {
             e.preventDefault(); // On empêche le navigateur de soumettre le formulaire
-            var id='32';
             //var formData = new FormData($(this)[0]);
             var formdata = new FormData($form[0]);
             var data = (formdata !== null) ? formdata : $form.serialize();
@@ -544,8 +602,8 @@
     <!--main content start-->
 
       <section id="main-content">
-          <section class="wrapper">
-		  <div class="row">
+        <section class="wrapper">
+		    <div class="row">
 				<div class="col-lg-4">
 				  <ol class="breadcrumb">
 					<li><i class="fa fa-home"></i><a href="index.html">Accueil</a></li>
@@ -553,7 +611,7 @@
 						<li><i class="fa fa-user-md"></i>Editer un profil</li>
 				  </ol>
 				</div>
-</div>
+            </div>
 			
 <!-- page start-->
 
@@ -659,7 +717,7 @@
                             </li>
                             <li>
                               <label for="prenom" class="label_inline">Prénom :</label>
-                              <input class="main" id="prenom" type="text" name="prenom">
+                              <input class="main" id="prenom" type="text" name="prenom" size=30>
                               <div id="check_prenom"></div>
                             </li>
                             <li>
@@ -820,7 +878,7 @@
                             </li>
                             <li>
                               <label for="adresse" class="label_inline">Adresse :</label>
-                              <input class="main" id="adresse" type="text" name="adresse">
+                              <input class="main" id="adresse" type="text" name="adresse" size=50>
                               <div id="check_adresse"></div>
                             </li>
                             <li>
@@ -840,7 +898,7 @@
                             </li>
                             <li>
                               <label for="langue" class="label_inline">Langue :</label>
-                              <select class="main" name="langue" id="langue" onchange="document.location.href = &#39;/lang?lang=&#39; + $(this).val() + &#39;&amp;redirect=/account&#39;">
+                              <select class="main" name="langue" id="langue">
                                 <option value="en"> English </option>
                                 <option value="us"> English (us) </option>
 								  <option value="ar"> Arabe </option>  
