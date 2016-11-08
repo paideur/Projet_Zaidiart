@@ -70,14 +70,11 @@
 		
         var $form = $(this); // L'objet jQuery du formulaire
     // Je récupère les valeurs
-		var usedata="non";
 		var formdata = (window.FormData) ? new FormData($form[0]) : null;
         var donnee = (formdata !== null) ? formdata : $form.serialize();
-		var idArtist = '20';
-		var text = 0;
+		var text;
 		image = document.getElementById("image").value;
-		if(document.getElementById("use_data").checked == true){
-		usedata="oui";}
+		title = document.getElementById("title").value;
         // Je vérifie une première fois pour ne pas lancer la requête HTTP
         // si je sais que mon PHP renverra une erreur
         if(image === '') {
@@ -85,24 +82,26 @@
         } 
 		else 
 		{
-		
-            // Envoi de la requête HTTP en mode asynchrone
-            $.ajax({
-                url: $form.attr('action'),
-                type: $form.attr('method'), 
-                contentType: false, 
-				processData: false, 
-				data: donnee,
-                success: function(data) { 
-                    text = data;
-					alert(text);
-					if (text === 'Enregistrement effectué avec succès'){
-					location.href = "realisation.html";
+			if (title==='') alert('Veuillez donner un titre à votre image'); 
+            
+			else
+			{
+				
+				// Envoi de la requête HTTP en mode asynchrone
+				$.ajax({
+					url: $form.attr('action'),
+					type: $form.attr('method'), 
+					contentType: false, 
+					processData: false, 
+					data: donnee,
+					dataType: "json",
+					success: function(data) { 
+						alert(data);
+						if (data == "Enregistrement effectué avec succès")
+						location.href = "realisation.html";							
 					}
-					
-                }
-
-            });
+				});
+			}
 			
         }
 		
@@ -488,19 +487,19 @@
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu">
               <div class="list-group">
                 <a href="#" class="list-group-item active text-center">
-                  <h4 class="glyphicon glyphicon-upload"></h4><br/>Télécharger des oeuvres 
+                  <h4 class="glyphicon glyphicon-upload"></h4><br/><font color = "000000">Télécharger des oeuvres </font>
                 </a>
                 <a href="realisation.html#description" class="list-group-item text-center">
-                  <h4 class="glyphicon glyphicon-pencil"></h4><br/>Description 
+                  <h4 class="glyphicon glyphicon-pencil"></h4><br/><font color = "000000">Description</font>
                 </a>
                 <a href="printmini.php" class="list-group-item text-center">
-                  <h4 class="glyphicon glyphicon-check"></h4><br/>Aperçu
+                  <h4 class="glyphicon glyphicon-check"></h4><br/><font color = "000000">Aperçu </font>
                 </a>
                 <a href="#" class="list-group-item text-center">
-                  <h4 class="glyphicon glyphicon-share"></h4><br/>Partager 
+                  <h4 class="glyphicon glyphicon-share"></h4><br/><font color = "000000">Partager </font>
                 </a>
                 <a href="#" class="list-group-item text-center">
-                  <h4 class="glyphicon glyphicon-edit"></h4><br/>Critiquer d'art 
+                  <h4 class="glyphicon glyphicon-edit"></h4><br/><font color = "000000">Critiquer d'art </font>
                 </a>
               </div>
               </div>
@@ -531,7 +530,7 @@
     <label for="exampleInputEmail1">Title et date de création de l'oeuvre</label>
     <input type="text" class="form-control" name="title" id="title" maxlength = "50" aria-describedby="emailHelp" placeholder="Title de l'oeuvre"></br>
     <input type="text" class="form-control" name="createdate"  id="createdate" maxlength = "10" aria-describedby="emailHelp" placeholder="Date de création (par exemple 01/12/2000)"></br>
-    <small id="emailHelp" class="form-text text-muted">Le titre n'est obligatoire, mais nous vous conseillons d'attribuer un ou plusieurs titres significatifs pour l’ œuvre. Il s’agit d’un identifiant de l’œuvre</small>
+    <!-- <small id="emailHelp" class="form-text text-muted">Le titre n'est obligatoire, mais nous vous conseillons d'attribuer un ou plusieurs titres significatifs pour l’ œuvre. Il s’agit d’un identifiant de l’œuvre</small> -->
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Dimensions</label>
@@ -579,7 +578,7 @@
       <label class="form-check-label">
         <input type="checkbox" class="form-check-input" name="accept_condition" id="accept_condition">
 			<a href="conditonutilisation.html" target="_blank">
-				<font color = "ff3333">
+				<font color = "0000ff">
 				Accepter les condtions d'utilisation du site
 				</font>
 			</a>
@@ -587,9 +586,9 @@
     </div>
     <div class="form-check">
     <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" name="use_data" id="use_data">
+        <input type="checkbox" class="form-check-input" name="use_data" id="use_data" value="yes">
 			<a href="usedata.html" target="_blank">
-				<font color = "ff3333">
+				<font color = "0000ff">
 				Accepter l'utilisation de vos données par le site pour des raisons commerciales
 				</font>
 			</a> 

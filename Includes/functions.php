@@ -200,6 +200,7 @@ function deconnecter() {
     session_destroy();
 }
  
+ 
  // fonction de creation de dossier pour chaque artiste pour l'upload de ses images
 function createdossier ($dossier)
 {
@@ -226,17 +227,21 @@ function upload_image($index,$record,$maxsize,$extensions)
    //taille limite
      if ($_FILES[$index]['size'] > $maxsize) 
 		{	$statut = "Fichier trop volumineux ";
-		print_r($_FILES[$index]);
-		 return $statut;}
+			 return $statut;}
    //verification de l'extension du fichier
-     $ext = strtolower (substr(strrchr($_FILES[$index]['name'],'.'),1));
-     if (!in_array($ext,$extensions)) 
+		$TailleImage = getimagesize($_FILES[$index]['tmp_name']);
+	 
+	 $ext = explode('/',$TailleImage['mime']);
+     //$ext = strtolower (substr(strrchr($_FILES[$index]['name'],'.'),1));
+     if (!in_array($ext[1],$extensions)) 
 		{	$statut = "Votre fichier n'est pas une image";
 		 return $statut;}
    //Déplacement sur le serveur
    else 
    {	
-   
+		//gestion du checkbox utilisation des données personnelles
+		if(isset($_POST['use_data'])) $usedata = $_POST['use_data'];
+		else $usedata='non';
 		$temp =$_FILES[$index]['tmp_name'];
 		$nom  =$_FILES[$index]['name'];
 		$description =$_POST['description'];
@@ -248,8 +253,6 @@ function upload_image($index,$record,$maxsize,$extensions)
 		$poids = $_POST['poids'];
 		$technique = $_POST['technique'];
 		$idUser=$idUser=$_SESSION['id_user'];
-		//$usedata = $_GET['usedata'];
-		$usedata="oui";
 		$date = date('Y-m-d- H:i');
 		
 		//connexion et enregistrement des infos dans la BD
@@ -272,29 +275,39 @@ function upload_image($index,$record,$maxsize,$extensions)
 			else
 			{
 				$last = $cnx->lastInsertId();
-				$file_name = $last.'.'.$ext;
+				//renomme l'image à partir du dernier id_achievement de la table t_achievements` 
+				$file_name = $last.'.'.$ext[1];
 				if (move_uploaded_file($temp,$record.$file_name))				
-		        {
+		        {						
 					 // creation de l'image en fontion de l'extension
-					if ($ext == "jpg" or $ext == "jpeg" ) $source = imagecreatefromjpeg($record.$file_name);
-					else if ($ext == "png") $source = imagecreatefrompng($record.$file_name); 
-					else if ($ext == "gif") $source = imagecreatefromgif($record.$file_name);
-					$destination = imagecreatetruecolor(200, 150); // On crée la miniature vide
+					if ($TailleImage['mime'] == "image/jpeg" or $TailleImage['mime'] == "image/jpg")
+						$source = imagecreatefromjpeg($record.$file_name);
+					else if ($TailleImage['mime'] == "image/png") $source = imagecreatefrompng($record.$file_name); 
+					else if ($TailleImage['mime'] == "image/gif" ) $source = imagecreatefromgif($record.$file_name);
+					
+					$NouvelleLargeur = 200;
+					$Reduction = ( ($NouvelleLargeur * 100)/$TailleImage[0] );
+					$NouvelleHauteur = ( ($TailleImage[1] * $Reduction)/100 );
+					
+					$destination = imagecreatetruecolor($NouvelleLargeur , $NouvelleHauteur) or die ("Erreur");
+					//$destination = imagecreatetruecolor(200, 150); // On crée la miniature vide
 
 					// Les fonctions imagesx et imagesy renvoient la largeur et la hauteur d'une image
-					$largeur_source = imagesx($source);
+				/* 	$largeur_source = imagesx($source);
 					$hauteur_source = imagesy($source);
 					$largeur_destination = imagesx($destination);
-					$hauteur_destination = imagesy($destination);
+					$hauteur_destination = imagesy($destination); */
 
 					// On crée la miniature
-					imagecopyresampled($destination, $source, 0, 0, 0, 0, $largeur_destination, $hauteur_destination, $largeur_source, $hauteur_source);
+					imagecopyresampled($destination , $source, 0, 0, 0, 0, $NouvelleLargeur, $NouvelleHauteur, $TailleImage[0],$TailleImage[1]);
+					//imagecopyresampled($destination, $source, 0, 0, 0, 0, $largeur_destination, $hauteur_destination, $largeur_source, $hauteur_source);
 
 					// On enregistre la miniature sous le même nom dans le dossier miniature de l'artiste"
-					imagejpeg($destination,$record."/"."miniature"."/".$file_name);	
+					imagejpeg($destination,$record."/"."miniature"."/".$file_name,100);	
 						
 					$statut = "Enregistrement effectué avec succès";
 					return $statut;
+					//print_r ($TailleImage);
 				
 				}
 		
@@ -344,3 +357,4 @@ function upload_files($doc,$save,$file_maxsize,$extension)
 
 ?>
  
+

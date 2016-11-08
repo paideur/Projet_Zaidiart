@@ -2,10 +2,11 @@
   session_start();
  require('../Includes/db.php');
  require('../Includes/functions.php');
+ 
  $id_artist = $_GET['idUser'];
  $id_image = $_GET['id'];
  $ext = $_GET['ext'];
- $req=$cnx->prepare("DELETE FROM `t_achievements` WHERE `t_achievements`.`ID_ACHIEV` =:id_image");
+  $req=$cnx->prepare("DELETE FROM `t_achievements` WHERE `t_achievements`.`ID_ACHIEV` =:id_image");
  $req->execute([':id_image' => $id_image]);
 	 if($req)
 	 {
@@ -16,5 +17,6 @@
 	 }
 	else{
 		echo "erreur lors de la suppression de l'image";
-	}
-?>
+	} 
+
+	?>
