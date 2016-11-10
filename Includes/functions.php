@@ -256,7 +256,7 @@ function upload_image($index,$record,$maxsize,$extensions)
 		$date = date('Y-m-d- H:i');
 		
 		//connexion et enregistrement des infos dans la BD
-			$cnx = new PDO('mysql:host=localhost;dbname=zaidiart', 'root', 'root', array (PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+			$cnx = new PDO('mysql:host=localhost;dbname=zaidiart', 'root', 'root',array(1002 => 'SET NAMES utf8'));
 			
 			$pdoReq = $cnx->prepare("INSERT INTO `t_achievements` (ID_ARTIST, TITLE, IMAGE, IMAGE_THUMB,DESCRIPTION1,CREATE_DATE,UPDATE_DATE,
 			`PATH`, `YEAR`, `CHARACTERISTICS`, `LENGTH`, `HEIGHT`, `WIDTH`, `TECHNIQUE`, `POIDS`, `CATEGORY`,`MEDIA`,`USE_DATA`)
