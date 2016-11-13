@@ -96,12 +96,10 @@
 
         function loadArtiste(){
             //Recuperer les données en JSON
-            var id='32';
             $.ajax({
                 type: "POST", //request type
                 dataType: "json",
                 url:"getprofilbyId.php", //La page de traitement de l'édition
-                data: "idArtist="+id,
                 success:function(datas){
                     var bornDate=datas.BORN_DATE;
                     var sexe=datas.GENDER;
@@ -114,9 +112,22 @@
                     //Chargement du profil 
                     document.getElementById("nomArtistique").innerHTML=datas.BLOG_NAME;
                     document.getElementById("nomArtistique2").innerHTML=datas.BLOG_NAME;
-                    document.getElementById("professionArtistique").innerHTML="Profession: "+datas.PROF_ARTISTIQUE;
+                    var profession=datas.PROF_ARTISTIQUE;
+                    if(profession==null){  //Si la profession contient des valeurs null
+                        profession="Renseigner votre profession";
+                        document.getElementById("professionArtistique").innerHTML="Profession: <span style=\"color:red\">"+profession+"</span>";
+                    }else{
+                        document.getElementById("professionArtistique").innerHTML="Profession: "+datas.PROF_ARTISTIQUE;
+                    }
+                    //document.getElementById("professionArtistique").innerHTML="Profession: "+datas.PROF_ARTISTIQUE;
                     var adresse=datas.ADDRESS+" "+datas.ZIP_CODE+" "+datas.CITY+","+datas.COUNTRY;
-                    document.getElementById("adresseResidence").innerHTML="Adresse complète: "+adresse;
+                    if(adresse.indexOf("null")>=0){  //Si l'adresse contient des valeurs null
+                        adresse="Renseigner votre adresse";
+                        document.getElementById("adresseResidence").innerHTML="Adresse complète: <span style=\"color:red\">"+adresse+"</span>";
+                    }else{
+                        document.getElementById("adresseResidence").innerHTML="Adresse complète: "+adresse;
+                    }
+                    
                     
                     document.getElementById("nom").value=datas.LAST_NAME;
                     document.getElementById("prenom").value=datas.FIRST_NAME;

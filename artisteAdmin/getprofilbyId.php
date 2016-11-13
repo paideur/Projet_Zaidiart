@@ -6,10 +6,11 @@
  */
 
 require('../Includes/db.php');
+session_start();
 
 //Selection de l'artiste
-$idUser=$_POST['idArtist'];
-//$idUser='32';
+$idUser=$_SESSION['id_user'];
+
 $req=$cnx->prepare("Select * from t_users where ID_USER=:idUser");
 $req->execute([':idUser' => $idUser]);
 $artiste= $req->fetch();

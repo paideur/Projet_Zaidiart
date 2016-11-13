@@ -7,6 +7,7 @@
 
 require('../Includes/db.php');
 require('../Includes/functions.php');
+session_start();
 
 //Selection de l'artiste
 $idUser=$_SESSION['id_user'];

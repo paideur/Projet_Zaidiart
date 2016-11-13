@@ -6,6 +6,7 @@
  */
 
 require('../Includes/db.php');
+session_start();
 
 //Selection de l'artiste
 $idUser=$_SESSION['id_user'];
