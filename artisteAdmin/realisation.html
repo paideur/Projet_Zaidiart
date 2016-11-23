@@ -51,6 +51,12 @@
 	<script src="js/jquery.js"></script>
 	<script>	
 
+	   //Fonction de validation d'un champs numeric 
+        function validerChampNumeric(value){
+            var re = /^[1-9][0-9 ]*$/
+            return re.test(value);
+        }
+	
 	$(document).ready(function() {
 						
 	   $('#formulaire').click(function () {
@@ -72,9 +78,14 @@
     // Je récupère les valeurs
 		var formdata = (window.FormData) ? new FormData($form[0]) : null;
         var donnee = (formdata !== null) ? formdata : $form.serialize();
-		var text;
+		var errors =[]; //Contient les erreurs de saisies
+        var cpt=0; //Compteur du tableau d'erreurs
 		image = document.getElementById("image").value;
 		title = document.getElementById("title").value;
+		longueur = document.getElementById("longueur").value;
+		largeur = document.getElementById("largeur").value;
+		hauteur = document.getElementById("hauteur").value;
+		poids = document.getElementById("poids").value;
         // Je vérifie une première fois pour ne pas lancer la requête HTTP
         // si je sais que mon PHP renverra une erreur
         if(image === '') {
@@ -86,21 +97,31 @@
             
 			else
 			{
+				if(!validerChampNumeric(longueur)){errors[cpt]="Longueur incorrecte"; cpt++;}
+				if(!validerChampNumeric(largeur)){errors[cpt]="largeur incorrecte"; cpt++;}
+				if(!validerChampNumeric(hauteur)){errors[cpt]="hauteur incorrecte"; cpt++;}
+				if(!validerChampNumeric(poids)){errors[cpt]="poids incorrect";}
+ 
+				if(errors!="") 
+				alert("Veuillez corriger les dimensions suivantes de votre oeuvre: \n\n"+errors);
 				
-				// Envoi de la requête HTTP en mode asynchrone
-				$.ajax({
-					url: $form.attr('action'),
-					type: $form.attr('method'), 
-					contentType: false, 
-					processData: false, 
-					data: donnee,
-					dataType: "json",
-					success: function(data) { 
-						alert(data);
-						if (data == "Enregistrement effectué avec succès")
-						location.href = "realisation.html";							
-					}
-				});
+				else
+				{
+					// Envoi de la requête HTTP en mode asynchrone
+					$.ajax({
+						url: $form.attr('action'),
+						type: $form.attr('method'), 
+						contentType: false, 
+						processData: false, 
+						data: donnee,
+						dataType: "json",
+						success: function(data) { 
+							alert(data);
+							if (data == "Enregistrement effectué avec succès")
+							location.href = "realisation.html";							
+						}
+					});
+				}
 			}
 			
         }
@@ -130,6 +151,30 @@
 				
 		
 });
+
+
+        function loadArtiste(){
+            //Recuperer les données en JSON
+            $.ajax({
+                type: "POST", //request type
+                dataType: "json",
+                url:"getuserinfo.php", //La page de traitement de l'édition
+                success:function(datas){
+				 if(datas == "Veuillez vous connecter"){
+				 alert(datas);
+				 location.href = "connexion.html";
+				 }
+				 else {
+                    //Chargement du formulaire
+                    document.getElementById("profil").src=datas.photo;
+                    //Chargement du profil 
+                    document.getElementById("nomArtistique").innerHTML=datas.BLOG_NAME;  
+                 }
+				}
+            });
+        }
+
+		window.onload = loadArtiste();
 
 
 	</script>
@@ -367,15 +412,15 @@
                 <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="profile-ava">
-                                <img alt="" src="img/avatar1_small.jpg">
+                                <img id='profil' src="#" alt="Profile Picture" width="30" class="img-md img-circle mar-btm">
                             </span>
-                        <span class="username">Nom artistique</span>
+                         <span class="username" id="nomArtistique"></span>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu extended logout">
                         <div class="log-arrow-up"></div>
                         <li class="eborder-top">
-                            <a href="#"><i class="icon_profile"></i> Mon Profil</a>
+                            <a href="editerprofil.html"><i class="icon_profile"></i> Mon Profil</a>
                         </li>
                         <li>
                             <a href="#"><i class="icon_mail_alt"></i> Message</a>
