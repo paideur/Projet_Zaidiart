@@ -104,17 +104,30 @@ require('../Includes/PHPMailer_v5.1/class.smtp.php');
 
      $mail = new PHPmailer();
      $mail->IsSMTP(); 
-	 $mail->SetLanguage("en", "../phpmailer/language/");
+	   $mail->SetLanguage("en", "../phpmailer/language/");
 	 
-	 $mail->SMTPAuth   = true;                  // enable SMTP authentication
-	 $mail->SMTPSecure = "ssl"; 
+	   $mail->SMTPAuth   = true;                  // enable SMTP authentication
+	   $mail->SMTPSecure = "ssl"; 
 	 
-     $mail->Host='smtp.gmail.com';
+    /* $mail->Host='smtp.gmail.com';
      $mail->Port = 465;
-	 $mail->Username   = "zaidiartinternational@gmail.com";  // GMAIL username
-	 $mail->Password   = "Zaidiart1234";            // GMAIL password
+	   $mail->Username   = "zaidiartinternational@gmail.com";  // GMAIL username
+	   $mail->Password   = "Zaidiart1234";            // GMAIL password
+     $mail->From= 'zaidiartinternational@gmail.com'; */
+    //Recuperation de la config Mail
+     $reqMail=$cnx->prepare('SELECT * FROM t_config_mail WHERE id = ?');
+     $reqMail->execute([1]);
+     $configMail= $reqMail->fetch();
+
+     $mail->Host=$configMail['HOST'];
+     $mail->Port = $configMail['PORT'];
+     $mail->Username   = $configMail['USERNAME'];  // GMAIL username
+     $mail->Password   = $configMail['PASSWORD'];            // GMAIL password
+     $mail->From=  $configMail['FROM']; 
+
+
      //$mail ->IsMail();
-     $mail->From= 'zaidiartinternational@gmail.com'; 
+    
      $mail->FromName= 'ZAIDIART' ;
      $mail->AddAddress ($adresse);
      $mail->AddReplyTo('zaidiartinternational@gmail.com');   
